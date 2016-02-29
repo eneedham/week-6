@@ -16,6 +16,12 @@ p.main {
     top: 0;
 }
 
+/*::outline {
+   line-color: #000000;
+   line-width: 2;
+   line-join: round;
+ }*/
+
 .sidebar {
     position: absolute;
     left: 0px;
@@ -31,4 +37,29 @@ p.main {
   position: absolute;
   background-color: #fff;
   z-index: 2000;
+  margin-top: 500px;
+}
+.name{
+  position: absolute;
+  padding: 5px;
+}
+
+.box.mon{
+  background-color: #BC8112;
+}
+.box.tues{
+  background-color: #BC5A12;
+}
+.box.wed{
+  background-color: #0B736B;
+}
+.box.th{
+  background-color: #9A1B00;
+}
+.box.fri{
+  background-color: #024960;
+}
+
+#button{
+  float: right;
 }

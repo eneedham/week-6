@@ -100,12 +100,38 @@ the week was the most common for garbage removal?
 
 var dataset = 'https://raw.githubusercontent.com/CPLN690-MUSA610/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson';
 
+
 var myStyle = function(feature) {
-  return {};
+  switch (feature.properties.COLLDAY){
+    case "MON":
+      return {fillColor: "#BC8112", fillOpacity: 1, color: "#434343", weight: 3};
+    case "TUE":
+      return {fillColor: "#BC5A12", fillOpacity: 1, color: "#434343", weight: 3};
+    case "WED":
+      return {fillColor: "#0B736B", fillOpacity: 1, color: "#434343", weight: 3};
+    case "THU":
+      return {fillColor: "#9A1B00", fillOpacity: 1, color: "#434343", weight: 3};
+    case "FRI":
+      return {fillColor: "#024960", fillOpacity: 1, color: "#434343", weight: 3};
+    default:
+      return {fillColor: "#B3ADA4", fillOpacity: 1, color: "#434343", weight: 3};
+  }
 };
 
 var eachFeature = function(feature, layer) {
   layer.on('click', function (e) {
+    if (feature.properties.COLLDAY == "MON" | feature.properties.COLLDAY == "FRI"){
+      $(".day-of-week").text(feature.properties.COLLDAY + "DAY");
+    }
+    if (feature.properties.COLLDAY == "TUE"){
+      $(".day-of-week").text(feature.properties.COLLDAY + "SDAY");
+    }
+    if (feature.properties.COLLDAY == "WED"){
+      $(".day-of-week").text(feature.properties.COLLDAY + "NESDAY");
+    }
+    if (feature.properties.COLLDAY == "TH"){
+      $(".day-of-week").text(feature.properties.COLLDAY + "URSDAY");
+    }
     /* =====================
     The following code will run every time a feature on the map is clicked.
     Check out feature.properties to see some useful data about the feature that
@@ -113,16 +139,25 @@ var eachFeature = function(feature, layer) {
     ===================== */
     console.log(feature);
     showResults();
+    var bounds = this.getBounds();
+    map.fitBounds(bounds);
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  if (feature.properties.COLLDAY !== " "){
+    return true;
+  }
 };
+
 
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
     var parsedData = JSON.parse(data);
+    var count = _.countBy(parsedData.features, function(array){
+      return array.properties.COLLDAY;
+    });
+    console.log(count);
     var myFeatureGroup = L.geoJson(parsedData, {
       onEachFeature: eachFeature,
       style: myStyle,
@@ -141,6 +176,27 @@ var showResults = function() {
   $('#intro').hide();
   $('#results').show();
 };
+
+
+  var closeResults = function(){
+      $('#intro').show();
+      $('#results').hide();
+      map.setView([40.000, -75.1090], 11);
+  };
+
+
+
+// USE COUNTBY AND MAX TO DO STRETCH GOAL 8 - Will do later
+
+// var testCountBy = _.countBy(feature.properties.COLLDAY, function(num) {
+//   return _.max();
+// });
+//
+// var Count = function(feature){
+//   var howMany = _.countBy(feature[0].properties, "COLLDAY");
+//   console.log(howMany);
+// };
+
 
 /* =====================
 Leaflet Configuration
